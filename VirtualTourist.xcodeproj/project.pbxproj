@@ -18,6 +18,7 @@
 		C46996171DD39F5600F9BB2C /* Pin+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46996151DD39F5600F9BB2C /* Pin+CoreDataClass.swift */; };
 		C46996181DD39F5600F9BB2C /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C46996161DD39F5600F9BB2C /* Pin+CoreDataProperties.swift */; };
 		C469961B1DD4536300F9BB2C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C469961A1DD4536300F9BB2C /* MapKit.framework */; };
+		C469961D1DD4572A00F9BB2C /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C469961C1DD4572A00F9BB2C /* CoreDataStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		C46996151DD39F5600F9BB2C /* Pin+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataClass.swift"; path = "../Pin+CoreDataClass.swift"; sourceTree = "<group>"; };
 		C46996161DD39F5600F9BB2C /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		C469961A1DD4536300F9BB2C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		C469961C1DD4572A00F9BB2C /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 			children = (
 				C46996151DD39F5600F9BB2C /* Pin+CoreDataClass.swift */,
 				C46996161DD39F5600F9BB2C /* Pin+CoreDataProperties.swift */,
+				C469961C1DD4572A00F9BB2C /* CoreDataStack.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				C468A5621DD11FA80049ACB0 /* AppDelegate.swift in Sources */,
 				C46996171DD39F5600F9BB2C /* Pin+CoreDataClass.swift in Sources */,
 				C468A5931DD121A30049ACB0 /* MapViewController.swift in Sources */,
+				C469961D1DD4572A00F9BB2C /* CoreDataStack.swift in Sources */,
 				C46996181DD39F5600F9BB2C /* Pin+CoreDataProperties.swift in Sources */,
 				C468A56A1DD11FA80049ACB0 /* VirtualTourist.xcdatamodeld in Sources */,
 			);
