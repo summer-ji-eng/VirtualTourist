@@ -18,7 +18,10 @@ class MapViewController: UIViewController {
         
         mapView.delegate = self
 
-        // Do any additional setup after loading the view.
+        let uilpr = UILongPressGestureRecognizer(target: self, action: #selector(longPressDropAnnotation))
+        uilpr.minimumPressDuration = 2.0
+        
+        mapView.addGestureRecognizer(uilpr)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -29,6 +32,18 @@ class MapViewController: UIViewController {
             let span = MKCoordinateSpan(latitudeDelta: savedRegion[MapRegion.mapRegionSpanLat]!, longitudeDelta: savedRegion[MapRegion.mapRegionSpaLon]!)
             mapView.region = MKCoordinateRegion(center: center, span: span)
         }
+    }
+    
+    func longPressDropAnnotation(gestureRecognizer: UIGestureRecognizer) {
+        let touchPoint = gestureRecognizer.location(in: mapView)
+        let touchCoordinate : CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
+        
+        if UIGestureRecognizerState.began == gestureRecognizer.state {
+            let pin = MKPointAnnotation()
+            pin.coordinate = touchCoordinate
+            mapView.addAnnotation(pin)
+        }
+       
     }
 
 }
@@ -47,6 +62,24 @@ extension MapViewController: MKMapViewDelegate {
             MapRegion.mapRegionSpaLon : mapView.region.span.longitudeDelta
         ]
         UserDefaults.standard.setValue(regionPersistent, forKey: RegionPersistent.regionKey)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+            let identifier = "pin"
+            let view : MKPinAnnotationView
+            
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView {
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            } else {
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.canShowCallout = false
+                view.animatesDrop = true
+                view.isDraggable = false
+            }
+            return view
+        
     }
     
 }
