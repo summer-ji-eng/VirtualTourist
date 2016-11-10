@@ -82,6 +82,9 @@ extension MapViewController: MKMapViewDelegate {
         UserDefaults.standard.setValue(regionPersistent, forKey: RegionPersistent.regionKey)
     }
     
+    /*
+     display annotations
+    */
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
             let identifier = "pin"
@@ -100,6 +103,21 @@ extension MapViewController: MKMapViewDelegate {
         
     }
     
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        // if it is editMode
+        // TODO: pop out an alert message, ask user if want to delete the pin
+        // if it is not editMode
+        // TODO: present DetailPinViewController
+        performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: self)
+        
+    }
+    
+    // MARK: -Navigation
+    //override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //    if segue.identifier == SegueIdentifier.detailPinIdentifier {
+    //        let controller = segue.destination as! DetailPinViewController
+    //    }
+    //}
 }
 
 extension MapViewController {
@@ -114,5 +132,9 @@ extension MapViewController {
     
     struct RegionPersistent {
         static let regionKey = "regionPersistentKey"
+    }
+    
+    struct SegueIdentifier {
+        static let detailPinIdentifier = "detailPinSegue"
     }
 }
