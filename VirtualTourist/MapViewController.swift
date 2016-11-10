@@ -8,10 +8,13 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
+    
+    let sharedContext = CoreDataStack.sharedInstance().persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +25,8 @@ class MapViewController: UIViewController {
         uilpr.minimumPressDuration = 2.0
         
         mapView.addGestureRecognizer(uilpr)
+        
+        mapView.addAnnotations(fetchAllPins())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -39,11 +44,24 @@ class MapViewController: UIViewController {
         let touchCoordinate : CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
         if UIGestureRecognizerState.began == gestureRecognizer.state {
-            let pin = MKPointAnnotation()
-            pin.coordinate = touchCoordinate
+            let pin = Pin(coordinate: touchCoordinate, context: sharedContext)
             mapView.addAnnotation(pin)
+            CoreDataStack.sharedInstance().saveContext()
         }
-       
+    }
+    
+    // fetching our Pins and adding them to our map when starting our app
+    func fetchAllPins() -> [Pin] {
+        let fetchRequest = NSFetchRequest<Pin>(entityName: "Pin")
+        var pins : [Pin] = []
+        do {
+            let results = try sharedContext.fetch(fetchRequest)
+            pins = results 
+        } catch let error as NSError {
+            //showAlert("Ooops", message: "Something went wrong when trying to load existing data")
+            print("An error occured accessing managed object context \(error.localizedDescription)")
+        }
+        return pins
     }
 
 }
