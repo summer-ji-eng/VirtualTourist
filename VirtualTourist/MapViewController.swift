@@ -12,12 +12,16 @@ import CoreData
 
 class MapViewController: UIViewController {
 
+    // MARK: -IBoutlet
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
     
     // MARK: -Properties
     let sharedContext = CoreDataStack.sharedInstance().persistentContainer.viewContext
     var selectedPin : Pin!
+    var isEditMode = false
     
+    // MARK: -LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,6 +45,20 @@ class MapViewController: UIViewController {
         }
     }
     
+    // MARK: -IBAction functions
+    // once the user toggle the EditBarButton on the top right, it will change the isEditMode status
+    @IBAction func toggleEditBarButton(_ sender: UIBarButtonItem) {
+        if isEditMode {
+            isEditMode = false
+            editBarButton.title = EditBarButtonTitle.editTitle
+        } else {
+            isEditMode = true
+            editBarButton.title = EditBarButtonTitle.doneTitle
+        }
+    }
+    
+    // MARK: -Helper functions
+    // long press on the mapView to drop annotation on the screen
     func longPressDropAnnotation(gestureRecognizer: UIGestureRecognizer) {
         let touchPoint = gestureRecognizer.location(in: mapView)
         let touchCoordinate : CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
@@ -68,6 +86,7 @@ class MapViewController: UIViewController {
 
 }
 
+// MARK: -MKMapViewDelegate class extends MapViewController
 extension MapViewController: MKMapViewDelegate {
     
     
@@ -107,12 +126,39 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         selectedPin = view.annotation as! Pin
-        // if it is editMode
-        // TODO: pop out an alert message, ask user if want to delete the pin
-        // if it is not editMode
-        // TODO: present DetailPinViewController
-        performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: self)
+        if isEditMode {
+            // if it is editMode
+            // pop out an alert message, ask user if want to delete the pin
+            showDeletePinAlertViewController(vcTitle: Alert.alertTitle, vcMessage: Alert.alertMessage)
+            // TODO: change the isEditMode status after showing Alert
+        } else {
+            // if it is not editMode
+            // present DetailPinViewController
+            performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: self)
+        }
+    }
+    
+    // MARK: -Helper Funcions
+    // show alert function ask user if he/she want to delete the select PIN
+    func showDeletePinAlertViewController(vcTitle: String, vcMessage: String) {
+        let alert = UIAlertController(title: vcTitle, message: vcMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: Alert.AlertActionTitle.cancelTitle, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: Alert.AlertActionTitle.deleteTilte, style: .default, handler: { (action) in
+            self.deleteSelectedPin(pin: self.selectedPin)
+            self.selectedPin = nil
+        }))
+        present(alert, animated: true, completion: (() -> Void)? {
+            self.isEditMode = false;
+            self.editBarButton.title = EditBarButtonTitle.editTitle
+            })
         
+    }
+    
+    // Delete selected pin function
+    func deleteSelectedPin(pin: Pin) {
+        mapView.removeAnnotation(pin)
+        sharedContext.delete(pin)
+        CoreDataStack.sharedInstance().saveContext()
     }
     
     // MARK: -Navigation
@@ -123,8 +169,11 @@ extension MapViewController: MKMapViewDelegate {
             controller.curMapRegion = mapView.region
         }
     }
+    
+    
 }
 
+// MARK: -Constant Class of MapViewController
 extension MapViewController {
     
     struct MapRegion {
@@ -141,5 +190,21 @@ extension MapViewController {
     
     struct SegueIdentifier {
         static let detailPinIdentifier = "detailPinSegue"
+    }
+    
+    struct EditBarButtonTitle {
+        static let editTitle = "Edit"
+        static let doneTitle = "Done"
+    }
+    
+    struct Alert {
+        
+        static let alertTitle = "Delete Pin"
+        static let alertMessage = "Do you want to delete this pin?"
+        
+        struct AlertActionTitle {
+            static let cancelTitle = "Cancel"
+            static let deleteTilte = "Delete"
+        }
     }
 }

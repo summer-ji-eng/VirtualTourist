@@ -11,7 +11,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Map View Controller-->
+        <!--Virtual Tourist-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="MapViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -35,8 +35,15 @@
                             <constraint firstItem="DRV-c5-qHQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="YcC-lF-nh0"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="oJ0-IV-LNK"/>
+                    <navigationItem key="navigationItem" title="Virtual Tourist" id="oJ0-IV-LNK">
+                        <barButtonItem key="rightBarButtonItem" title="Edit" style="done" id="ace-gz-vqg">
+                            <connections>
+                                <action selector="toggleEditBarButton:" destination="BYZ-38-t0r" id="SkS-vb-Cp9"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
+                        <outlet property="editBarButton" destination="ace-gz-vqg" id="cM7-dr-N3O"/>
                         <outlet property="mapView" destination="DRV-c5-qHQ" id="ZYP-eP-OkD"/>
                         <segue destination="Vuh-gu-UOE" kind="show" identifier="detailPinSegue" id="H2b-DQ-PQv"/>
                     </connections>
