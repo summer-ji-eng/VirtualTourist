@@ -14,7 +14,9 @@ class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     
+    // MARK: -Properties
     let sharedContext = CoreDataStack.sharedInstance().persistentContainer.viewContext
+    var selectedPin : Pin!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,7 +24,7 @@ class MapViewController: UIViewController {
         mapView.delegate = self
 
         let uilpr = UILongPressGestureRecognizer(target: self, action: #selector(longPressDropAnnotation))
-        uilpr.minimumPressDuration = 2.0
+        uilpr.minimumPressDuration = 0.5
         
         mapView.addGestureRecognizer(uilpr)
         
@@ -104,6 +106,7 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        selectedPin = view.annotation as! Pin
         // if it is editMode
         // TODO: pop out an alert message, ask user if want to delete the pin
         // if it is not editMode
@@ -113,11 +116,13 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     // MARK: -Navigation
-    //override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //    if segue.identifier == SegueIdentifier.detailPinIdentifier {
-    //        let controller = segue.destination as! DetailPinViewController
-    //    }
-    //}
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifier.detailPinIdentifier {
+            let controller = segue.destination as! DetailPinViewController
+            controller.curPin = selectedPin
+            controller.curMapRegion = mapView.region
+        }
+    }
 }
 
 extension MapViewController {

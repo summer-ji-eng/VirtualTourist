@@ -10,15 +10,32 @@ import UIKit
 import MapKit
 
 class DetailPinViewController: UIViewController {
+    
+    // MARK: -Properties
+    var curPin : Pin!
+    var curMapRegion : MKCoordinateRegion!
 
+    // MARK: -IBOutles
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        configureMapView(pin: curPin, mapRegion: curMapRegion)
+        
     }
-
     
-
+    // MARK: -MapView properity configurate and add annotation
+    private func configureMapView(pin: Pin, mapRegion: MKCoordinateRegion) {
+        // display current Pin
+        mapView.addAnnotation(curPin)
+        // set mapview properties
+        mapView.setCenter(curPin.coordinate, animated: true)
+        mapView.setRegion(curMapRegion, animated: true)
+        mapView.isZoomEnabled = false
+        mapView.isScrollEnabled = false
+        mapView.sizeToFit()
+    }
 }
+
+
