@@ -13,6 +13,8 @@ import MapKit
 @objc(Pin)
 public class Pin: NSManagedObject, MKAnnotation {
     
+    var isDownlaoding = false
+    
     override init(entity: NSEntityDescription, insertInto context: NSManagedObjectContext?) {
         super.init(entity: entity, insertInto: context)
     }
