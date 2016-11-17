@@ -9,19 +9,24 @@
 import UIKit
 import MapKit
 
-class DetailPinViewController: UIViewController {
+class DetailPinViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: -Properties
     var curPin : Pin!
     var curMapRegion : MKCoordinateRegion!
+    fileprivate let reuseIdentifier = "FlickrCollectionViewCell"
 
     // MARK: -IBOutles
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         configureMapView(pin: curPin, mapRegion: curMapRegion)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
         
     }
     
@@ -35,6 +40,20 @@ class DetailPinViewController: UIViewController {
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
         mapView.sizeToFit()
+    }
+}
+
+extension DetailPinViewController {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FlickrCollectionCell
+        return cell
     }
 }
 
