@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class DetailPinViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
@@ -15,10 +16,14 @@ class DetailPinViewController: UIViewController, UICollectionViewDelegate, UICol
     var curPin : Pin!
     var curMapRegion : MKCoordinateRegion!
     fileprivate let reuseIdentifier = "FlickrCollectionViewCell"
+    var sharedContext : NSManagedObjectContext{
+        return CoreDataStack.sharedInstance().persistentContainer.viewContext
+    }
 
     // MARK: -IBOutles
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var newCollectionButtonOutlet: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,27 +38,11 @@ class DetailPinViewController: UIViewController, UICollectionViewDelegate, UICol
         // using URL to get JSON data by func of taskForGetMethodWithURL
         // using JSON data get photos' url, using url to save imagedata into core data
         
-        let flickrClient = FlickrClient.sharedClient()
-        flickrClient.getTotalPagesOfPin(curPin: curPin, completionHandler: {(pages, error) in
-            
-            if (error != nil) {
-                print(error!.localizedDescription)
-            }
-            
-            print("Total page is \(pages!)")
-        })
         
-        flickrClient.downloadImagesForPinWithPages(curPin: curPin, pages: Int(curPin.numPages), completionHandler: { (sucess, error) in
-            if (error != nil) {
-                print(error!.localizedDescription)
-            }
-            
-            print("download sucess")
-        })
-        
-        
-    }
+
     
+    }
+
     // MARK: -MapView properity configurate and add annotation
     private func configureMapView(pin: Pin, mapRegion: MKCoordinateRegion) {
         // display current Pin
