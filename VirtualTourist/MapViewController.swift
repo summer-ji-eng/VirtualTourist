@@ -61,16 +61,35 @@ class MapViewController: UIViewController {
     // MARK: -Helper functions
     // long press on the mapView to drop annotation on the screen
     func longPressDropAnnotation(gestureRecognizer: UIGestureRecognizer) {
+        
+        // if is in the edit mode, not allow user add pin
+        if isEditMode {
+            return
+        }
+        
         let touchPoint = gestureRecognizer.location(in: mapView)
         let touchCoordinate : CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
-        let pin = Pin(coordinate: touchCoordinate, context: sharedContext)
+        let lastAddPin = Pin(coordinate: touchCoordinate, context: sharedContext)
         if UIGestureRecognizerState.began == gestureRecognizer.state {
-            mapView.addAnnotation(pin)
+            mapView.addAnnotation(lastAddPin)
             CoreDataStack.sharedInstance().saveContext()
+            print("before request numpages is \(lastAddPin.numPages)")
         }
         if UIGestureRecognizerState.ended == gestureRecognizer.state {
-            // TODO: get photos from flickr
+            // get the current pin the numpages of flickr
+            flickrClient.getTotalPagesOfPin(curPin: lastAddPin, completionHandler: { (sucess, error) in
+                guard (error == nil) else {
+                    // TODO: create an aler show description
+                    print(error!.localizedDescription)
+                    return
+                }
+                if (sucess) {
+                    print("after request numpages is \(lastAddPin.numPages)")
+                } else {
+                    print("get pages fail")
+                }
+            })
         }
     }
     

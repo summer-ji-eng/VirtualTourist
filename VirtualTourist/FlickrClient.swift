@@ -37,6 +37,11 @@ class FlickrClient: NSObject {
     // Number of photos to return per page. If this argument is omitted, it defaults to 100. The maximum allowed value is 500
     // The page of results to return. If this argument is omitted, it defaults to 1.
     
+    /*
+     For here, we request 40 per page, up to 4000 results, we get max total pages is 100
+     */
+    
+    
     // TODO: After getting totalpages, random pick a page to download photos
     // func getPhotoDictionary by given pin, totalpages return photo dictionary
     func downloadImagesForPinWithPages(curPin: Pin, pages: Int, completionHandler: @escaping (_ sucess: Bool, _ error: NSError?)->Void) {
@@ -50,6 +55,7 @@ class FlickrClient: NSObject {
             FlickrParameterKeys.Format : FlickrParameterValues.ResponseFormat,
             FlickrParameterKeys.NoJSONCallback : FlickrParameterValues.DisableJSONCallback,
             FlickrParameterKeys.SafeSearch : FlickrParameterValues.UseSafeSearch,
+            FlickrParameterKeys.PerPage : FlickrParameterValues.FortyPerPage,
             FlickrParameterKeys.Page : randomPage,
             FlickrParameterKeys.BoundingBox : createBoundingBoxString(pin: curPin)
         ] as [String : Any]
@@ -92,7 +98,7 @@ class FlickrClient: NSObject {
     }
     
     // Get total pages of photos by given Pin in JSONResult from taskForGetMethodWithURL
-    func getTotalPagesOfPin(curPin: Pin, completionHandler : @escaping (_ totalpages: Int?, _ error: NSError?)->Void) {
+    func getTotalPagesOfPin(curPin: Pin, completionHandler : @escaping (_ sucess: Bool, _ error: NSError?)->Void) {
         
         let parameters = [
             FlickrParameterKeys.APIKey : FlickrParameterValues.APIKey,
@@ -101,8 +107,9 @@ class FlickrClient: NSObject {
             FlickrParameterKeys.Format : FlickrParameterValues.ResponseFormat,
             FlickrParameterKeys.NoJSONCallback : FlickrParameterValues.DisableJSONCallback,
             FlickrParameterKeys.SafeSearch : FlickrParameterValues.UseSafeSearch,
+            FlickrParameterKeys.PerPage : FlickrParameterValues.FortyPerPage,
             FlickrParameterKeys.BoundingBox : createBoundingBoxString(pin: curPin)
-            ]
+            ] as [String : Any]
         
         let url = createURLFromParameters(parameters: parameters as [String : AnyObject])
         print("When call 'getTotalPagesOfPin', the request url is \(url)")
@@ -110,13 +117,13 @@ class FlickrClient: NSObject {
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
-                completionHandler(nil, error)
+                completionHandler(false, error)
                 return
             }
             /* GUARD: Is status 'ok'? */
             guard (JSONResult?[FlickrResponseKeys.Status] as! String == "ok") else {
                 print("The status of requesting data is 'fail'")
-                completionHandler(nil, NSError(domain: FlickrError.DomainErrorStatusFail, code: 0, userInfo: nil))
+                completionHandler(false, NSError(domain: FlickrError.DomainErrorStatusFail, code: 0, userInfo: nil))
                 return
             }
             
@@ -126,11 +133,11 @@ class FlickrClient: NSObject {
                     // save numPages in Pin Object core data
                     curPin.numPages = Int16(totalPages)
                     CoreDataStack.sharedInstance().saveContext()
-                    completionHandler(totalPages, nil)
+                    completionHandler(true, nil)
                 }
                 
             } else {
-                completionHandler(nil, NSError(domain: FlickrError.DomainErrorNotFoundPagesKey, code: 0, userInfo: nil))
+                completionHandler(false, NSError(domain: FlickrError.DomainErrorNotFoundPagesKey, code: 0, userInfo: nil))
             }
         })
     }

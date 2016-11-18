@@ -25,6 +25,7 @@ extension FlickrClient {
         static let SafeSearch = "safe_search"
         static let BoundingBox = "bbox"
         static let Page = "page"
+        static let PerPage = "perpage"
     }
     
     // MARK: Flickr Parameter Values
@@ -35,6 +36,7 @@ extension FlickrClient {
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let MediumURL = "url_m"
         static let UseSafeSearch = "1"
+        static let FortyPerPage = 40
     }
     
     // MARK: Flickr Response Keys
@@ -46,6 +48,7 @@ extension FlickrClient {
         static let MediumURL = "url_m"
         static let Pages = "pages"
         static let Total = "total"
+        
     }
     
     // MARK: Flickr Response Values
