@@ -67,6 +67,12 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="4tA-fg-j7i">
                                 <rect key="frame" x="0.0" y="64" width="375" height="167"/>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Image Found" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hW8-A9-Yrg">
+                                <rect key="frame" x="117.5" y="413" width="140" height="23"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Vz2-3Z-cRu">
                                 <rect key="frame" x="0.0" y="231" width="375" height="386"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -103,6 +109,7 @@
                                         <connections>
                                             <outlet property="activeIndicator" destination="QOk-Rl-Bj7" id="uG2-zG-uoa"/>
                                             <outlet property="flickrImageView" destination="1Zo-Qr-tmX" id="igo-Zb-qXL"/>
+                                            <outlet property="selectedBackgroundView" destination="Vz2-3Z-cRu" id="Mz2-hd-LUI"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -121,12 +128,14 @@
                         <constraints>
                             <constraint firstItem="Vz2-3Z-cRu" firstAttribute="top" secondItem="4tA-fg-j7i" secondAttribute="bottom" id="5My-zk-0tn"/>
                             <constraint firstItem="dhB-s8-DxU" firstAttribute="top" secondItem="Vz2-3Z-cRu" secondAttribute="bottom" id="I36-er-6Og"/>
+                            <constraint firstItem="hW8-A9-Yrg" firstAttribute="centerY" secondItem="Vz2-3Z-cRu" secondAttribute="centerY" id="Pba-R7-mU4"/>
                             <constraint firstItem="4tA-fg-j7i" firstAttribute="top" secondItem="FLN-68-vOG" secondAttribute="bottom" id="W3z-tn-PXj"/>
                             <constraint firstItem="dhB-s8-DxU" firstAttribute="bottom" secondItem="TEn-F0-xGW" secondAttribute="top" id="W5f-EX-frM"/>
                             <constraint firstItem="Vz2-3Z-cRu" firstAttribute="leading" secondItem="7ko-9k-6i8" secondAttribute="leadingMargin" constant="-16" id="XN1-KW-25G"/>
                             <constraint firstItem="dhB-s8-DxU" firstAttribute="trailing" secondItem="Vz2-3Z-cRu" secondAttribute="trailing" id="Zyw-GX-sc6"/>
                             <constraint firstItem="dhB-s8-DxU" firstAttribute="leading" secondItem="Vz2-3Z-cRu" secondAttribute="leading" id="cpF-w1-H3R"/>
                             <constraint firstItem="TEn-F0-xGW" firstAttribute="top" secondItem="Vz2-3Z-cRu" secondAttribute="bottom" constant="50" id="faZ-1e-YoM"/>
+                            <constraint firstItem="hW8-A9-Yrg" firstAttribute="centerX" secondItem="Vz2-3Z-cRu" secondAttribute="centerX" id="i3r-s8-V5C"/>
                             <constraint firstItem="4tA-fg-j7i" firstAttribute="height" secondItem="7ko-9k-6i8" secondAttribute="height" multiplier="0.25" id="jKR-lp-tIb"/>
                             <constraint firstItem="4tA-fg-j7i" firstAttribute="leading" secondItem="7ko-9k-6i8" secondAttribute="leadingMargin" constant="-16" id="lhX-tz-hZu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Vz2-3Z-cRu" secondAttribute="trailing" constant="-16" id="pLi-zA-SWa"/>
@@ -134,9 +143,10 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="collectionView" destination="Vz2-3Z-cRu" id="8il-FK-jpU"/>
+                        <outlet property="collectionView" destination="Vz2-3Z-cRu" id="KWi-4U-NAE"/>
                         <outlet property="mapView" destination="4tA-fg-j7i" id="vZI-Dh-Rm3"/>
                         <outlet property="newCollectionButtonOutlet" destination="dhB-s8-DxU" id="Oyg-bM-oSP"/>
+                        <outlet property="noImageLabel" destination="hW8-A9-Yrg" id="za4-YR-PQ8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xra-bC-kAP" userLabel="First Responder" sceneMemberID="firstResponder"/>

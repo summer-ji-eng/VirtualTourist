@@ -16,9 +16,9 @@ extension Pin {
         return NSFetchRequest<Pin>(entityName: "Pin");
     }
 
-    @NSManaged public var numPages: Int16
     @NSManaged public var latitude: Double
     @NSManaged public var longtitude: Double
     @NSManaged public var photos: NSOrderedSet
+    @NSManaged public var numPages: NSNumber?
 
 }

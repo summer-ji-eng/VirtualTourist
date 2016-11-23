@@ -78,18 +78,20 @@ class MapViewController: UIViewController {
         }
         if UIGestureRecognizerState.ended == gestureRecognizer.state {
             // get the current pin the numpages of flickr
-            flickrClient.getTotalPagesOfPin(curPin: lastAddPin, completionHandler: { (sucess, error) in
+            flickrClient.downloadImagesForPin(curPin: lastAddPin, completionHandler: { (sucess, error) in
+                lastAddPin.isDownlaoding = false
                 guard (error == nil) else {
                     // TODO: create an aler show description
                     print(error!.localizedDescription)
                     return
                 }
                 if (sucess) {
-                    print("after request numpages is \(lastAddPin.numPages)")
+                    print("after request numpages is \(CoreDataStack.sharedInstance().fetchLastAddPin().numPages)")
                 } else {
                     print("get pages fail")
                 }
             })
+            CoreDataStack.sharedInstance().saveContext()
         }
     }
     
@@ -187,9 +189,11 @@ extension MapViewController: MKMapViewDelegate {
     // MARK: -Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifier.detailPinIdentifier {
+            mapView.deselectAnnotation(selectedPin, animated: false)
             let controller = segue.destination as! DetailPinViewController
             controller.curPin = selectedPin
             controller.curMapRegion = mapView.region
+            print("prepare segue to DetailVC curPin's numpages: \(selectedPin.numPages)")
         }
     }
     
