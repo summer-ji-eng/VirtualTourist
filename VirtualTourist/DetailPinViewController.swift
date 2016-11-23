@@ -24,10 +24,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     var fetchedResultsController: NSFetchedResultsController<Photo>!
     
     // store updated indexes
-    var selectedIndexes   = [NSIndexPath]()
-    var insertedIndexPaths: [NSIndexPath]!
-    var deletedIndexPaths : [NSIndexPath]!
-    var updatedIndexPaths : [NSIndexPath]!
+    var blockOperations: [BlockOperation] = []
 
     // MARK: -IBOutles
     @IBOutlet weak var collectionView: UICollectionView!
@@ -53,6 +50,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         
         /* setup the fetchedResultsController*/
         initializeFetchedResultsController()
+        
 
         print("CurPin's numpages :\(curPin.numPages)")
         print("fetchObjects nums: \(fetchedResultsController.fetchedObjects?.count)")
@@ -86,12 +84,15 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
         
+        // reload data for UICollectionView
+        collectionView.reloadData()
+        
     }
     
     
 
     // MARK: -MapView properity configurate and add annotation
-    private func configureMapView(pin: Pin, mapRegion: MKCoordinateRegion) {
+    func configureMapView(pin: Pin, mapRegion: MKCoordinateRegion) {
         // display current Pin
         mapView.addAnnotation(curPin)
         // set mapview properties
@@ -100,40 +101,6 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
         mapView.sizeToFit()
-    }
-    
-    // MARK: -Communicate data changes to the Collection View
-    private func controllerWillChangeContent(controller: NSFetchedResultsController<Photo>) {
-        insertedIndexPaths = [NSIndexPath]()
-        deletedIndexPaths  = [NSIndexPath]()
-        updatedIndexPaths  = [NSIndexPath]()
-    }
-    
-    private func controller(controller: NSFetchedResultsController<Photo>, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        switch type {
-        case .insert:
-            insertedIndexPaths.append(newIndexPath!)
-        case .update:
-            updatedIndexPaths.append(indexPath!)
-        case .delete:
-            deletedIndexPaths.append(indexPath!)
-        default:
-            break
-        }
-    }
-    
-    private func controllerDidChangeContent(controller: NSFetchedResultsController<Photo>) {
-        collectionView.performBatchUpdates({
-            for indexPath in self.insertedIndexPaths {
-                self.collectionView.insertItems(at: [indexPath as IndexPath])
-            }
-            for indexPath in self.deletedIndexPaths {
-                self.collectionView.deleteItems(at: [indexPath as IndexPath])
-            }
-            for indexPath in self.updatedIndexPaths {
-                self.collectionView.reloadItems(at: [indexPath as IndexPath])
-            }
-        }, completion: nil)
     }
     
     // MARK: -download new collection set associate of pin
@@ -178,6 +145,91 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
 }
+
+// MARK: -Communicate data changes to the Collection View
+extension DetailPinViewController {
+    
+    
+    func controller(controller: NSFetchedResultsController<Photo>, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch type {
+        case .insert:
+            print("Insert Object: \(newIndexPath)")
+            
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.insertItems(at: [newIndexPath! as IndexPath])
+                    }
+                })
+            )
+        case .update:
+            print("Update Object: \(indexPath)")
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.reloadItems(at: [indexPath! as IndexPath])
+                    }
+                })
+            )
+        case .delete:
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.deleteItems(at: [indexPath! as IndexPath])
+                    }
+                })
+            )
+        default:
+            break
+        }
+    }
+    
+    func controller(controller: NSFetchedResultsController<Photo>, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.insertSections(NSIndexSet(index: sectionIndex) as IndexSet)
+                    }
+                })
+            )
+        case .update:
+            print("Update Section: \(sectionIndex)")
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.reloadSections(NSIndexSet(index: sectionIndex) as IndexSet)
+                    }
+                })
+            )
+        case .delete:
+            print("Delete Section: \(sectionIndex)")
+            
+            blockOperations.append(
+                BlockOperation(block: { [weak self] in
+                    if let this = self {
+                        this.collectionView!.deleteSections(NSIndexSet(index: sectionIndex) as IndexSet)
+                    }
+                })
+            )
+        default:
+            break
+        }
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController<Photo>) {
+        collectionView!.performBatchUpdates({ () -> Void in
+            for operation: BlockOperation in self.blockOperations {
+                operation.start()
+            }
+        }, completion: { (finished) -> Void in
+            self.blockOperations.removeAll(keepingCapacity: false)
+        })
+    }
+
+}
+
 
 // Integrating the Fetched Results Controller with the Table View Data Source
 extension DetailPinViewController {

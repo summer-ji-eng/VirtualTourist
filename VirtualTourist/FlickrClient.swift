@@ -110,7 +110,7 @@ class FlickrClient: NSObject {
                     
                 }
             }
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: self.pinFinishedDownloadingNotification), object: self, userInfo: nil))
+//            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: self.pinFinishedDownloadingNotification), object: self, userInfo: nil))
             completionHandler(true, nil)
         })
         
