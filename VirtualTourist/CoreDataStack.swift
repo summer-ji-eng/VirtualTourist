@@ -69,46 +69,6 @@ class CoreDataStack {
         }
     }
     
-    func saveNumPages(numPages: Int) {
-        let context = persistentContainer.viewContext
-        let entity =  NSEntityDescription.entity(forEntityName: "Pin", in: context)
-        let pin = NSManagedObject(entity: entity!, insertInto: context)
-        pin.setValue(numPages as NSNumber, forKey: "numPages")
-        print("saving numpages \(numPages)")
-        do {
-            try context.save()
-            print("save pin's numPages sucess")
-            print(context)
-        } catch let error as NSError {
-            print("Could not save numPages in pin, error is \(error.localizedDescription)")
-        }
-    }
-    
-    // save image in same photo
-//    func saveImageData(imageData: NSData) {
-//        let context = persistentContainer.viewContext
-//        let entity =  NSEntityDescription.entity(forEntityName: "Photo", in: context)
-//        let photo = NSManagedObject(entity: entity!, insertInto: context)
-//        photo.setValue(imageData, forKey: "imageData")
-//        do {
-//            try context.save()
-//        } catch let error as NSError {
-//            fatalError("Could not save Photo's imageData, error \(error.localizedDescription)")
-//        }
-//    }
-    
-    func savePhotoObject(photoURL: String, curPin: Pin, data: NSData) {
-        let context = persistentContainer.viewContext
-        let photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: context) as! Photo
-        photo.photoURL = photoURL
-        photo.pin = curPin
-        photo.imageData = data
-        do {
-            try context.save()
-        } catch let error as NSError {
-            fatalError("Could not save Photo, error \(error.localizedDescription)")
-        }
-    }
     
     func fetchLastAddPin()-> Pin {
         let context = persistentContainer.viewContext
@@ -124,5 +84,21 @@ class CoreDataStack {
             print("Could not fetch result of Pin, error is \(error.localizedDescription)")
         }
         return curPin!
+    }
+    
+    func fetchSelectedPinInCoreData(selectedPin: Pin) -> Pin {
+        let context = persistentContainer.viewContext
+        var curPin : Pin!
+        let request : NSFetchRequest<Pin> = Pin.fetchRequest()
+        request.predicate = NSPredicate.init(format: "latitude <= \(selectedPin.latitude) + 1 AND latitude >= \(selectedPin.latitude) - 1 AND longtitude <= \(selectedPin.longtitude) + 1 AND longtitude >= \(selectedPin.longtitude) - 1")
+        do {
+            let fetchResults = try context.fetch(request)
+            if let pin = fetchResults.first {
+                curPin = pin
+            }
+        } catch let error as NSError {
+            print("Could not fetch result of Pin on Selected Pin, error is \(error.localizedDescription)")
+        }
+        return curPin
     }
 }
