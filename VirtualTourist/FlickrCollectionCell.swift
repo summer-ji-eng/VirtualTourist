@@ -20,6 +20,7 @@ class FlickrCollectionCell : UICollectionViewCell {
         if flickrImageView.image == nil {
             activeIndicator.isHidden = false
             activeIndicator.startAnimating()
+            flickrImageView.backgroundColor = UIColor.blue
         }
         
     }

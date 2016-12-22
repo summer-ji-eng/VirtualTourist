@@ -30,6 +30,8 @@ extension DetailPinViewController {
         let photo = fetchedResultsController.object(at: indexPath) 
         
         if photo.imageData != nil {
+            cell.activeIndicator.isHidden = true
+            cell.flickrImageView.isHidden = false
             cell.activeIndicator.stopAnimating()
             cell.flickrImageView.image = photo.image
         }

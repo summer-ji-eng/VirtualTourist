@@ -58,6 +58,14 @@ extension DetailPinViewController {
         }
         collectionView.reloadData()
     }
+    
+    // MARK: -Delete Existing Photo in Core Data
+    func deleteExistingPhototInCoreData() {
+        for photo in fetchedResultsController.fetchedObjects! as [Photo] {
+            sharedContext.delete(photo)
+        }
+        CoreDataStack.sharedInstance().saveContext()
+    }
 
     
 }

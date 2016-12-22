@@ -48,25 +48,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         if fetchedResultsController.fetchedObjects?.count == 0 {
             // when downloading disable button
             self.newCollectionButtonOutlet.isEnabled = false
-            downloadImages(pin: curPin)
-//            flickrClient.downloadImagesForPin(
-//                curPin: self.curPin,
-//                completionHandler: {(sucess, error) in
-//                guard (error == nil) else {
-//                    self.controllerUtilities.showErrorAlert(title: "Download Fail in Detail VC", message: (error?.localizedDescription)!)
-//                    return
-//                }
-//                    
-//                if sucess {
-//                    self.refreshFetchResult()
-//                    // If still zero, edge case
-//                    if self.fetchedResultsController.fetchedObjects?.count == 0 {
-//                        self.collectionView.isHidden = true
-//                        self.noImageLabel.isHidden = false
-//                    }
-//                }
-//                self.newCollectionButtonOutlet.isEnabled = true
-//            })
+            downloadNewSetOfImages(pin: curPin)
         }
     
     }
@@ -74,11 +56,11 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBAction func pressNewCollectionButton(_ sender: UIButton) {
         self.newCollectionButtonOutlet.isEnabled = false
         deleteExistingPhototInCoreData()
-        downloadImages(pin: curPin)
+        downloadNewSetOfImages(pin: curPin)
         
     }
     
-    func downloadImages(pin: Pin) {
+    func downloadNewSetOfImages(pin: Pin) {
         flickrClient.downloadImagesForPin(curPin: pin) { (sucess, error) in
             guard (error == nil) else {
                 self.controllerUtilities.showErrorAlert(title: "Download Fail in Detail VC", message: (error?.localizedDescription)!)
@@ -96,11 +78,6 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         }
     }
     
-    func deleteExistingPhototInCoreData() {
-        for photo in fetchedResultsController.fetchedObjects! as [Photo] {
-            sharedContext.delete(photo)
-        }
-        CoreDataStack.sharedInstance().saveContext()
-    }
+
 }
 

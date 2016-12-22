@@ -48,22 +48,6 @@ extension MapViewController {
             mapView.addAnnotation(lastAddPin)
             CoreDataStack.sharedInstance().saveContext()
         }
-        if UIGestureRecognizerState.ended == gestureRecognizer.state {
-            // get the current pin the numpages of flickr
-            flickrClient.downloadImagesForPin(curPin: lastAddPin, completionHandler: { (sucess, error) in
-                lastAddPin.isDownlaoding = false
-                guard (error == nil) else {
-                    self.controllerUtilities.showErrorAlert(title: "Error in Downloading", message: (error?.localizedDescription)!)
-                    return
-                }
-                if (sucess) {
-                    print("after request numpages is \(CoreDataStack.sharedInstance().fetchLastAddPin().numPages)")
-                } else {
-                    print("get pages fail")
-                }
-            })
-            CoreDataStack.sharedInstance().saveContext()
-        }
     }
     
     // fetching our Pins and adding them to our map when starting our app
@@ -109,7 +93,7 @@ extension MapViewController {
             let controller = segue.destination as! DetailPinViewController
             controller.curPin = selectedPin
             controller.curMapRegion = mapView.region
-            print("prepare segue to DetailVC curPin's numpages: \(selectedPin.numPages)")
+            controller.curMapRegion.center = selectedPin.coordinate
         }
     }
 

@@ -11,8 +11,4 @@ extension DetailPinViewController {
     struct CollectionViewCellIdentifier {
         static let reuseIdentifier = "FlickrCollectionViewCell"
     }
-    
-    struct Notification {
-        static let pinFinishedDownloadingNotification = "pinFinishedDownloadNotification"
-    }
 }
