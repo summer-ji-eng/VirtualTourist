@@ -44,28 +44,6 @@ class MapViewController: UIViewController {
         }
     }
     
-    // MARK: - init function and configuration function
-    fileprivate func initilizeGlobleVar() {
-        
-        isEditMode = false
-        sharedContext = CoreDataStack.sharedInstance().persistentContainer.viewContext
-        flickrClient = FlickrClient.sharedClient()
-        controllerUtilities = ControllerUtilites.sharedUtilites()
-        
-        mapView.delegate = self
-        
-    }
-    
-    fileprivate func configureLongPressGestureRecognizer() {
-        
-        let uilpr = UILongPressGestureRecognizer(target: self, action: #selector(longPressDropAnnotation))
-        uilpr.minimumPressDuration = 0.5
-        
-        mapView.addGestureRecognizer(uilpr)
-        
-        mapView.addAnnotations(fetchAllPins())
-    }
-    
     // MARK: -IBAction functions
     // once the user toggle the EditBarButton on the top right, it will change the isEditMode status
     @IBAction func toggleEditBarButton(_ sender: UIBarButtonItem) {

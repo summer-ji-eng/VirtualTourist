@@ -38,10 +38,13 @@ class FlickrClient: NSObject {
     // The page of results to return. If this argument is omitted, it defaults to 1.
     
     /*
-     For here, we request 40 per page, up to 4000 results, we get max total pages is 100
+     For here, we request 30 per page, up to 4000 results, we get max total pages is 100
      */
     
     func downloadImagesForPin(curPin: Pin, completionHandler: @escaping (_ sucess: Bool, _ error: NSError?)-> Void) {
+        // tell curPin is downloading right now
+        curPin.isDownlaoding = true
+        
         // random a page as parameters to garuantee a random photos
         var pageNum = 1
         if let numPages = curPin.numPages {
@@ -81,8 +84,10 @@ class FlickrClient: NSObject {
                 return
             }
             
-            // update current pin's numPages
-            self.updateNumPagesIntoExistingPin(context: self.sharedContext, curPin: curPin, numPages: numPages)
+            // update current pin's numPages if pin doesn't save numPages before
+            if (curPin.numPages == nil) {
+                self.updateNumPagesIntoExistingPin(context: self.sharedContext, curPin: curPin, numPages: numPages)
+            }
             
             // Save photo object in Core Data
             for photoObject in photoDictionary {

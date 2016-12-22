@@ -10,6 +10,28 @@ import CoreData
 
 extension MapViewController {
     
+    // MARK: - init function and configuration function
+    func initilizeGlobleVar() {
+        
+        isEditMode = false
+        sharedContext = CoreDataStack.sharedInstance().persistentContainer.viewContext
+        flickrClient = FlickrClient.sharedClient()
+        controllerUtilities = ControllerUtilites.sharedUtilites()
+        
+        mapView.delegate = self
+        
+    }
+    
+    func configureLongPressGestureRecognizer() {
+        
+        let uilpr = UILongPressGestureRecognizer(target: self, action: #selector(longPressDropAnnotation))
+        uilpr.minimumPressDuration = 0.5
+        
+        mapView.addGestureRecognizer(uilpr)
+        
+        mapView.addAnnotations(fetchAllPins())
+    }
+    
     // long press on the mapView to drop annotation on the screen
     func longPressDropAnnotation(gestureRecognizer: UIGestureRecognizer) {
         

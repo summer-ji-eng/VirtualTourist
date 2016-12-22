@@ -103,22 +103,6 @@ extension FlickrClient {
         } catch let error as NSError {
             print(error)
         }
-//        let request = NSFetchRequest<Pin>(entityName: "Pin")
-//        request.predicate = NSPredicate(format: "latitude = %@ AND longtitude = %@", curPin.latitude, curPin.longtitude)
-//        do {
-//            let fetchResults = try context.fetch(request)
-//            print("num of search \(fetchResults.count)")
-//            if fetchResults.count != 0 {
-//                let foundPin = fetchResults[0]
-//                foundPin.numPages = numPages as NSNumber?
-//            } else {
-//                print("fetchresult is 0")
-//            }
-//  
-//        } catch let error as NSError {
-//            print("Could not fetch result of Pin on Selected Pin, error is \(error.localizedDescription)")
-//        }
-//        CoreDataStack.sharedInstance().saveContext()
     }
     
     // save Photo object with photoURL, Pin, photoDat into CoreData
