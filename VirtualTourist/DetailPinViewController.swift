@@ -43,14 +43,18 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         // initialize all the shits with global variable
         initializeAllGlobalVars()
         
-        refreshFetchResult()
         
-        if fetchedResultsController.fetchedObjects?.count == 0 {
+        refreshFetchResult()
+            
+        if self.fetchedResultsController.fetchedObjects?.count == 0 {
             // when downloading disable button
             self.newCollectionButtonOutlet.isEnabled = false
-            downloadNewSetOfImages(pin: curPin)
+            performUIUpdatesOnMain {
+                self.downloadNewSetOfImages(pin: self.curPin)
+            }
+            
         }
-    
+        
     }
    
     @IBAction func pressNewCollectionButton(_ sender: UIButton) {

@@ -119,7 +119,7 @@
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dhB-s8-DxU">
                                 <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" name=".SFNSDisplay-Regular" family=".SF NS Display" pointSize="20"/>
                                 <state key="normal" title="New Collection"/>
                                 <connections>
                                     <action selector="pressNewCollectionButton:" destination="Vuh-gu-UOE" eventType="touchUpInside" id="9iv-q4-hVl"/>

@@ -30,12 +30,33 @@ extension DetailPinViewController {
         let photo = fetchedResultsController.object(at: indexPath) 
         
         if photo.imageData != nil {
-            cell.activeIndicator.isHidden = true
-            cell.flickrImageView.isHidden = false
-            cell.activeIndicator.stopAnimating()
-            cell.flickrImageView.image = photo.image
+            performUIUpdatesOnMain {
+                cell.activeIndicator.isHidden = true
+                cell.flickrImageView.isHidden = false
+                cell.activeIndicator.stopAnimating()
+                cell.flickrImageView.image = photo.image
+            }
         }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        newCollectionButtonOutlet.titleLabel?.text = ButtonTitle.RemoveSelectedPictures
+        
+        let alert = UIAlertController(title: Alert.ControllerDeleteMessage, message: Alert.ControllerDeleteMessage, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: Alert.ActionCancelTitle, style: .cancel, handler: { (action) in
+            collectionView.deselectItem(at: indexPath, animated: true)
+        }))
+        
+        alert.addAction(UIAlertAction(title: Alert.ActionDeleteTitle, style: .default, handler: { (action) in
+            let selectedPhoto = self.fetchedResultsController.object(at: indexPath)
+            collectionView.deselectItem(at: indexPath, animated: true)
+            self.sharedContext.delete(selectedPhoto)
+            CoreDataStack.sharedInstance().saveContext()
+        }))
+        present(alert, animated: true, completion: nil)
     }
 }
 

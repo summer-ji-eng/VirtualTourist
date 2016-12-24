@@ -103,7 +103,7 @@ class FlickrClient: NSObject {
                     } catch {
                         completionHandler(false, NSError(domain: FlickrError.DomainErrorFailTryImageData, code: 0, userInfo: nil))
                     }
-                }
+                } 
             }
             // tell current Pin download finish
             curPin.isDownlaoding = false

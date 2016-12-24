@@ -17,6 +17,7 @@ class FlickrCollectionCell : UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
+        flickrImageView.addSubview(activeIndicator)
         if flickrImageView.image == nil {
             activeIndicator.isHidden = false
             activeIndicator.startAnimating()

@@ -14,4 +14,10 @@ func performUIUpdatesOnMain(updates: @escaping ()->Void) {
     }
 }
 
+func performUpdatesOnBackground(updates: @escaping ()-> Void) {
+    DispatchQueue.global().async {
+        updates()
+    }
+}
+
 
