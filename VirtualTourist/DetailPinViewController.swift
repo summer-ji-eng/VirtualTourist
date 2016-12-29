@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     
     // MARK: -Properties
     var curPin : Pin!
@@ -50,7 +50,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
             // when downloading disable button
             self.newCollectionButtonOutlet.isEnabled = false
             performUIUpdatesOnMain {
-                self.downloadNewSetOfImages(pin: self.curPin)
+                self.downloadNewSetOfImages()
             }
             
         }
@@ -59,13 +59,13 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
    
     @IBAction func pressNewCollectionButton(_ sender: UIButton) {
         self.newCollectionButtonOutlet.isEnabled = false
-        deleteExistingPhototInCoreData()
-        downloadNewSetOfImages(pin: curPin)
+        deleteExistingPhototsInCoreData()
+        downloadNewSetOfImages()
         
     }
     
-    func downloadNewSetOfImages(pin: Pin) {
-        flickrClient.downloadImagesForPin(curPin: pin) { (sucess, error) in
+    func downloadNewSetOfImages() {
+        flickrClient.downloadImagesForPin(curPin: self.curPin) { (sucess, error) in
             guard (error == nil) else {
                 self.controllerUtilities.showErrorAlert(title: "Download Fail in Detail VC", message: (error?.localizedDescription)!)
                 return

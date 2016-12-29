@@ -43,8 +43,8 @@ extension MapViewController {
         let touchPoint = gestureRecognizer.location(in: mapView)
         let touchCoordinate : CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         
-        let lastAddPin = Pin(coordinate: touchCoordinate, context: sharedContext)
-        if UIGestureRecognizerState.began == gestureRecognizer.state {
+        if UIGestureRecognizerState.ended == gestureRecognizer.state {
+            let lastAddPin = Pin(coordinate: touchCoordinate, context: sharedContext)
             mapView.addAnnotation(lastAddPin)
             CoreDataStack.sharedInstance().saveContext()
         }
@@ -64,15 +64,14 @@ extension MapViewController {
     }
     
     // show alert function ask user if he/she want to delete the select PIN
-    func showDeletePinAlertViewController(vcTitle: String, vcMessage: String) {
+    func showDeletePinAlertViewController(selectedPin: Pin, vcTitle: String, vcMessage: String) {
         let alert = UIAlertController(title: vcTitle, message: vcMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: Alert.AlertActionTitle.cancelTitle, style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: Alert.AlertActionTitle.deleteTilte, style: .default, handler: { (action) in
-            self.deleteSelectedPin(pin: self.selectedPin)
-            self.selectedPin = nil
+            self.deleteSelectedPin(pin: selectedPin)
         }))
         present(alert, animated: true, completion: (() -> Void)? {
-            self.isEditMode = false;
+            //self.isEditMode = false;
             self.editBarButton.title = EditBarButtonTitle.editTitle
             })
         
@@ -81,21 +80,13 @@ extension MapViewController {
     // Delete selected pin function
     func deleteSelectedPin(pin: Pin) {
         let pinInCoreData = CoreDataStack.sharedInstance().fetchSelectedPinInCoreData(selectedPin: pin)
+//        print("pinInCoreData is \(pinInCoreData)")
         mapView.removeAnnotation(pin)
         sharedContext.delete(pinInCoreData)
         CoreDataStack.sharedInstance().saveContext()
     }
     
-    // MARK: -Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == SegueIdentifier.detailPinIdentifier {
-            mapView.deselectAnnotation(selectedPin, animated: false)
-            let controller = segue.destination as! DetailPinViewController
-            controller.curPin = selectedPin
-            controller.curMapRegion = mapView.region
-            controller.curMapRegion.center = selectedPin.coordinate
-        }
-    }
+
 
 
 }

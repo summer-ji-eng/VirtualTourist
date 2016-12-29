@@ -40,6 +40,27 @@ extension DetailPinViewController {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        print("prefetchItemsAt \(indexPaths)")
+        for i in indexPaths {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellIdentifier.reuseIdentifier, for: i) as! FlickrCollectionCell
+            let photo = fetchedResultsController.object(at: i)
+            if photo.imageData != nil {
+                performUIUpdatesOnMain {
+                    cell.activeIndicator.isHidden = true
+                    cell.flickrImageView.isHidden = false
+                    cell.activeIndicator.stopAnimating()
+                    cell.flickrImageView.image = photo.image
+                }
+            }
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        print("cancel prefetching for items at \(indexPaths)")
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         newCollectionButtonOutlet.titleLabel?.text = ButtonTitle.RemoveSelectedPictures

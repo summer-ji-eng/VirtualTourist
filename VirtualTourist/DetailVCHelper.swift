@@ -35,6 +35,7 @@ extension DetailPinViewController {
         /* comform collectionView delegate and dataSource */
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.prefetchDataSource = self
     }
     
     // MARK: -MapView properity configurate and add annotation
@@ -60,7 +61,7 @@ extension DetailPinViewController {
     }
     
     // MARK: -Delete Existing Photo in Core Data
-    func deleteExistingPhototInCoreData() {
+    func deleteExistingPhototsInCoreData() {
         for photo in fetchedResultsController.fetchedObjects! as [Photo] {
             sharedContext.delete(photo)
         }

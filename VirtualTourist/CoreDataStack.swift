@@ -90,7 +90,7 @@ class CoreDataStack {
         let context = persistentContainer.viewContext
         var curPin : Pin!
         let request : NSFetchRequest<Pin> = Pin.fetchRequest()
-        request.predicate = NSPredicate.init(format: "latitude <= \(selectedPin.latitude) + 1 AND latitude >= \(selectedPin.latitude) - 1 AND longtitude <= \(selectedPin.longtitude) + 1 AND longtitude >= \(selectedPin.longtitude) - 1")
+        request.predicate = NSPredicate.init(format: "latitude <= \(selectedPin.latitude) + 0.01 AND latitude >= \(selectedPin.latitude) - 0.01 AND longtitude <= \(selectedPin.longtitude) + 0.01 AND longtitude >= \(selectedPin.longtitude) - 0.01")
         do {
             let fetchResults = try context.fetch(request)
             if let pin = fetchResults.first {

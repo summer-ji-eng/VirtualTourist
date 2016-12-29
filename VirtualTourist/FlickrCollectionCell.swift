@@ -17,9 +17,10 @@ class FlickrCollectionCell : UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        flickrImageView.addSubview(activeIndicator)
         if flickrImageView.image == nil {
+            flickrImageView.isHidden = true
             activeIndicator.isHidden = false
+            activeIndicator.color = UIColor.red
             activeIndicator.startAnimating()
             flickrImageView.backgroundColor = UIColor.blue
         }

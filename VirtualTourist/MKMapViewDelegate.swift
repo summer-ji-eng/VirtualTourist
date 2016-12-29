@@ -30,6 +30,7 @@ extension MapViewController: MKMapViewDelegate {
     /*
      display annotations
     */
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
             let identifier = "pin"
@@ -49,19 +50,32 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        //selectedPin = view.annotation as! Pin
-        selectedPin = CoreDataStack.sharedInstance().fetchSelectedPinInCoreData(selectedPin: view.annotation as! Pin)
+        
+        let localSP = view.annotation as! Pin
+        
         if isEditMode == true {
             // if it is editMode
             // pop out an alert message, ask user if want to delete the pin
-            showDeletePinAlertViewController(vcTitle: Alert.alertTitle, vcMessage: Alert.alertMessage)
+            showDeletePinAlertViewController(selectedPin: localSP, vcTitle: Alert.alertTitle, vcMessage: Alert.alertMessage)
         } else {
             // if it is not editMode
             // present DetailPinViewController
             performUIUpdatesOnMain {
-                self.performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: self)
+                self.performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: localSP)
             }
             
+        }
+    }
+    
+    // MARK: -Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == SegueIdentifier.detailPinIdentifier {
+            let localSp = sender as! Pin
+            mapView.deselectAnnotation(localSp, animated: false)
+            let controller = segue.destination as! DetailPinViewController
+            controller.curPin = localSp
+            controller.curMapRegion = mapView.region
+            controller.curMapRegion.center = localSp.coordinate
         }
     }
 }

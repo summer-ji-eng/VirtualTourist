@@ -14,7 +14,7 @@ class FlickrClient: NSObject {
     
     // MARK: -Properties
     var session : URLSession
-    var sharedContext : NSManagedObjectContext{
+    private var sharedContext : NSManagedObjectContext{
         return CoreDataStack.sharedInstance().persistentContainer.viewContext
     }
     

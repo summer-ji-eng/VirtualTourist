@@ -14,7 +14,6 @@ class MapViewController: UIViewController {
 
     // MARK: -Properties
     var sharedContext : NSManagedObjectContext!
-    var selectedPin : Pin!
     var isEditMode : Bool!
     var flickrClient : FlickrClient!
     var controllerUtilities : ControllerUtilites!
