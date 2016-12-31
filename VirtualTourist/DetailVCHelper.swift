@@ -57,7 +57,6 @@ extension DetailPinViewController {
         } catch {
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
-        //collectionView.reloadData()
     }
     
     // MARK: -Delete Existing Photo in Core Data

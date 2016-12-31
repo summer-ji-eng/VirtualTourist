@@ -15,7 +15,6 @@
 		C44799891DDE3D0300521668 /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = C44799881DDE3D0300521668 /* GCDBlackBox.swift */; };
 		C45BDE331E03C4D10086AD68 /* MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE321E03C4D10086AD68 /* MKMapViewDelegate.swift */; };
 		C45BDE351E03C4E50086AD68 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE341E03C4E50086AD68 /* MapViewController.swift */; };
-		C45BDE371E03C5840086AD68 /* FetchedResultsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE361E03C5840086AD68 /* FetchedResultsDelegate.swift */; };
 		C45BDE391E03C5900086AD68 /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE381E03C5900086AD68 /* CollectionViewDataSource.swift */; };
 		C45BDE3B1E072D890086AD68 /* DPVCConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE3A1E072D890086AD68 /* DPVCConstant.swift */; };
 		C45BDE3D1E07C03C0086AD68 /* MapVCHelperFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45BDE3C1E07C03C0086AD68 /* MapVCHelperFunction.swift */; };
@@ -63,7 +62,6 @@
 		C44799881DDE3D0300521668 /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
 		C45BDE321E03C4D10086AD68 /* MKMapViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKMapViewDelegate.swift; sourceTree = "<group>"; };
 		C45BDE341E03C4E50086AD68 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C45BDE361E03C5840086AD68 /* FetchedResultsDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedResultsDelegate.swift; sourceTree = "<group>"; };
 		C45BDE381E03C5900086AD68 /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		C45BDE3A1E072D890086AD68 /* DPVCConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPVCConstant.swift; sourceTree = "<group>"; };
 		C45BDE3C1E07C03C0086AD68 /* MapVCHelperFunction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapVCHelperFunction.swift; sourceTree = "<group>"; };
@@ -152,7 +150,6 @@
 				C469961E1DD5064000F9BB2C /* DetailPinViewController.swift */,
 				C4E466621E0B605200C758AF /* DetailVCHelper.swift */,
 				C45BDE381E03C5900086AD68 /* CollectionViewDataSource.swift */,
-				C45BDE361E03C5840086AD68 /* FetchedResultsDelegate.swift */,
 				C45BDE3A1E072D890086AD68 /* DPVCConstant.swift */,
 			);
 			name = DetailPinViewController;
@@ -393,7 +390,6 @@
 				C468A5621DD11FA80049ACB0 /* AppDelegate.swift in Sources */,
 				C447997E1DDD171500521668 /* Photo+CoreDataClass.swift in Sources */,
 				C46996171DD39F5600F9BB2C /* Pin+CoreDataClass.swift in Sources */,
-				C45BDE371E03C5840086AD68 /* FetchedResultsDelegate.swift in Sources */,
 				C468A5931DD121A30049ACB0 /* Constants.swift in Sources */,
 				C44799871DDE3AE900521668 /* FlickrClientConstant.swift in Sources */,
 				C45BDE331E03C4D10086AD68 /* MKMapViewDelegate.swift in Sources */,

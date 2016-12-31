@@ -10,9 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource
-    //UICollectionViewDataSourcePrefetching
-{
+class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: -Properties
     var curPin : Pin!
@@ -23,7 +21,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     var sharedContext : NSManagedObjectContext{
         return CoreDataStack.sharedInstance().persistentContainer.viewContext
     }
-    var photoDictionary : [[String:AnyObject]] = []
+    var photoCount : NSInteger = 0
     
     // MARK: -IBOutles
     @IBOutlet weak var collectionView: UICollectionView!
@@ -42,24 +40,35 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
         // initialize all the shits with global variable
         initializeAllGlobalVars()
         
-        self.downloadNewSetOfImages()
+        self.refreshFetchResult()
+        
+        if self.fetchedResultsController.fetchedObjects?.count == 0 {
+            self.downloadNewSetOfImages()
+        } else {
+            performUIUpdatesOnMain {
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     @IBAction func pressNewCollectionButton(_ sender: UIButton) {
         self.newCollectionButtonOutlet.isEnabled = false
         deleteExistingPhototsInCoreData()
+        performUIUpdatesOnMain {
+            self.collectionView.reloadData()
+        }
         downloadNewSetOfImages()
-        
     }
     
     func downloadNewSetOfImages() {
+        self.newCollectionButtonOutlet.isEnabled = false
         flickrClient.downloadImagesForPin(curPin: self.curPin) { (sucess, photoDictionary,error) in
             guard (error == nil) else {
                 self.controllerUtilities.showErrorAlert(title: "Download Fail in Detail VC", message: (error?.localizedDescription)!)
                 return
             }
             if sucess {
-                self.photoDictionary = photoDictionary
+                self.photoCount = photoDictionary.count
                 // Save photo object in Core Data
                 for photoObject in photoDictionary {
                     guard let photoURL = photoObject[FlickrClient.FlickrResponseKeys.MediumURL] as? String else {
@@ -76,12 +85,14 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
                         }
                     }
                     catch {
-                        return
+                        print("dude, something is wrong!")
                     }
                     
                 }
                 
             }
+            
+            self.newCollectionButtonOutlet.isEnabled = true
         }
     }
     
