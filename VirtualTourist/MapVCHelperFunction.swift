@@ -70,17 +70,13 @@ extension MapViewController {
         alert.addAction(UIAlertAction(title: Alert.AlertActionTitle.deleteTilte, style: .default, handler: { (action) in
             self.deleteSelectedPin(pin: selectedPin)
         }))
-        present(alert, animated: true, completion: (() -> Void)? {
-            //self.isEditMode = false;
-            self.editBarButton.title = EditBarButtonTitle.editTitle
-            })
+        present(alert, animated: true, completion: (() -> Void)? {})
         
     }
     
     // Delete selected pin function
     func deleteSelectedPin(pin: Pin) {
         let pinInCoreData = CoreDataStack.sharedInstance().fetchSelectedPinInCoreData(selectedPin: pin)
-//        print("pinInCoreData is \(pinInCoreData)")
         mapView.removeAnnotation(pin)
         sharedContext.delete(pinInCoreData)
         CoreDataStack.sharedInstance().saveContext()
