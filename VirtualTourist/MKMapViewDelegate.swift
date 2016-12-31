@@ -60,9 +60,9 @@ extension MapViewController: MKMapViewDelegate {
         } else {
             // if it is not editMode
             // present DetailPinViewController
-            performUIUpdatesOnMain {
+//            performUIUpdatesOnMain {
                 self.performSegue(withIdentifier: SegueIdentifier.detailPinIdentifier, sender: localSP)
-            }
+//            }
             
         }
     }

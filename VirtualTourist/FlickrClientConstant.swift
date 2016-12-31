@@ -37,6 +37,8 @@ extension FlickrClient {
         static let MediumURL = "url_m"
         static let UseSafeSearch = "1"
         static let ThirtyPerPage = 30
+        static let TenPerPage = 10
+        static let OnePerPage = 1
     }
     
     // MARK: Flickr Response Keys
@@ -75,8 +77,8 @@ extension FlickrClient {
     
     
     struct BBoxParameters {
-        static let BOUNDING_BOX_HALF_WIDTH = 1.0
-        static let BOUNDING_BOX_HALF_HEIGHT = 1.0
+        static let BOUNDING_BOX_HALF_WIDTH = 0.05
+        static let BOUNDING_BOX_HALF_HEIGHT = 0.05
         static let LAT_MIN = -90.0
         static let LAT_MAX = 90.0
         static let LON_MIN = -180.0

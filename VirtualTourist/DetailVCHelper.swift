@@ -35,7 +35,7 @@ extension DetailPinViewController {
         /* comform collectionView delegate and dataSource */
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.prefetchDataSource = self
+        //collectionView.prefetchDataSource = self
     }
     
     // MARK: -MapView properity configurate and add annotation
@@ -57,7 +57,7 @@ extension DetailPinViewController {
         } catch {
             fatalError("Failed to initialize FetchedResultsController: \(error)")
         }
-        collectionView.reloadData()
+        //collectionView.reloadData()
     }
     
     // MARK: -Delete Existing Photo in Core Data

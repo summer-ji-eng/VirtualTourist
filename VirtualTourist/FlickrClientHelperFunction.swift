@@ -36,9 +36,7 @@ extension FlickrClient {
                     print("Your request returned an invalid response!")
                 }
                 
-                performUIUpdatesOnMain {
-                    completionHandler(nil, NSError(domain: FlickrError.DomainErrorGETImage, code: errorCode, userInfo: nil))
-                }
+                completionHandler(nil, NSError(domain: FlickrError.DomainErrorGETImage, code: errorCode, userInfo: nil))
                 return
             }
             /* GUARD: Was there any data returned? */
@@ -60,7 +58,7 @@ extension FlickrClient {
         
         task.resume()
     }
-
+    
     
     // Create URL by given parameters NSURLComponent()
     func createURLFromParameters(parameters: [String: AnyObject]) -> URL {
@@ -105,17 +103,5 @@ extension FlickrClient {
         }
     }
     
-    // save Photo object with photoURL, Pin, photoDat into CoreData
-    func savePhotoObject(context: NSManagedObjectContext,photoURL: String, curPin: Pin, data: NSData) {
-        let photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: context) as! Photo
-        photo.photoURL = photoURL
-        photo.pin = curPin
-        photo.imageData = data
-        do {
-            try context.save()
-        } catch let error as NSError {
-            fatalError("Could not save Photo, error \(error.localizedDescription)")
-        }
-    }
     
 }

@@ -20,4 +20,10 @@ func performUpdatesOnBackground(updates: @escaping ()-> Void) {
     }
 }
 
+func sync(lock: NSObject, closure: () -> Void) {
+    objc_sync_enter(lock)
+    closure()
+    objc_sync_exit(lock)
+}
+
 

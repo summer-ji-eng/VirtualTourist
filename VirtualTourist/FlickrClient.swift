@@ -41,7 +41,7 @@ class FlickrClient: NSObject {
      For here, we request 30 per page, up to 4000 results, we get max total pages is 100
      */
     
-    func downloadImagesForPin(curPin: Pin, completionHandler: @escaping (_ sucess: Bool, _ error: NSError?)-> Void) {
+    func downloadImagesForPin(curPin: Pin, completionHandler: @escaping (_ sucess: Bool, _ photoDictionary: [[String:AnyObject]], _ error: NSError?)-> Void) {
         // tell curPin is downloading right now
         curPin.isDownlaoding = true
         
@@ -69,18 +69,19 @@ class FlickrClient: NSObject {
                 ] as [String : Any]
         // create URL to request using parameters above
         let url = createURLFromParameters(parameters: parameters as [String:AnyObject])
+        
         self.taskForGETMethodWithURL(curURL: url, completionHandler: {(JSONResults, error) in
             /* GUARD: Was there an error? */
             guard (error == nil) else {
                 print("There was an error with your request: \(error)")
-                completionHandler(false, error)
+                completionHandler(false, [], error)
                 return
             }
             
             guard let photosDictionary = JSONResults?[FlickrResponseKeys.Photos] as? [String: AnyObject],
                 let photoDictionary = photosDictionary[FlickrResponseKeys.Photo] as? [[String:AnyObject]],
                 let numPages = photosDictionary[FlickrResponseKeys.Pages] as? Int else {
-                completionHandler(false, NSError(domain: FlickrError.DomainErrorNotFoundPhotoKey, code: 0, userInfo: nil))
+                completionHandler(false, [], NSError(domain: FlickrError.DomainErrorNotFoundPhotoKey, code: 0, userInfo: nil))
                 return
             }
             
@@ -89,26 +90,11 @@ class FlickrClient: NSObject {
                 self.updateNumPagesIntoExistingPin(context: self.sharedContext, curPin: curPin, numPages: numPages)
             }
             
-            // Save photo object in Core Data
-            for photoObject in photoDictionary {
-                guard let photoURL = photoObject[FlickrResponseKeys.MediumURL] as? String else {
-                    completionHandler(false, NSError(domain: FlickrError.DomainErrorNotFoundURLKey, code: 0, userInfo: nil))
-                    return
-                }
-                performUIUpdatesOnMain {
-                    do {
-                        let imageData = try Data(contentsOf: URL(string: photoURL)!) as NSData
-                        self.savePhotoObject(context: self.sharedContext, photoURL: photoURL, curPin: curPin, data: imageData)
-                        
-                    } catch {
-                        completionHandler(false, NSError(domain: FlickrError.DomainErrorFailTryImageData, code: 0, userInfo: nil))
-                    }
-                } 
-            }
+            
             // tell current Pin download finish
             curPin.isDownlaoding = false
 
-            completionHandler(true, nil)
+            completionHandler(true, photoDictionary, nil)
         })
         
     }

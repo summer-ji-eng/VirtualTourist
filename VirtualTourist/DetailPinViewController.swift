@@ -10,7 +10,9 @@ import UIKit
 import MapKit
 import CoreData
 
-class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource
+    //UICollectionViewDataSourcePrefetching
+{
     
     // MARK: -Properties
     var curPin : Pin!
@@ -21,6 +23,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     var sharedContext : NSManagedObjectContext{
         return CoreDataStack.sharedInstance().persistentContainer.viewContext
     }
+    var photoDictionary : [[String:AnyObject]] = []
     
     // MARK: -IBOutles
     @IBOutlet weak var collectionView: UICollectionView!
@@ -30,33 +33,18 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     
     // store updated indexes, this is used in fetch result delegate
     var blockOperations: [BlockOperation] = []
-
+    
     // MARK: -LifeCycle
     override func viewWillAppear(_ animated: Bool) {
         noImageLabel.isHidden = true
         collectionView.isHidden = false
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
         
         // initialize all the shits with global variable
         initializeAllGlobalVars()
         
-        
-        refreshFetchResult()
-            
-        if self.fetchedResultsController.fetchedObjects?.count == 0 {
-            // when downloading disable button
-            self.newCollectionButtonOutlet.isEnabled = false
-            performUIUpdatesOnMain {
-                self.downloadNewSetOfImages()
-            }
-            
-        }
-        
+        self.downloadNewSetOfImages()
     }
-   
+    
     @IBAction func pressNewCollectionButton(_ sender: UIButton) {
         self.newCollectionButtonOutlet.isEnabled = false
         deleteExistingPhototsInCoreData()
@@ -65,23 +53,50 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     }
     
     func downloadNewSetOfImages() {
-        flickrClient.downloadImagesForPin(curPin: self.curPin) { (sucess, error) in
+        flickrClient.downloadImagesForPin(curPin: self.curPin) { (sucess, photoDictionary,error) in
             guard (error == nil) else {
                 self.controllerUtilities.showErrorAlert(title: "Download Fail in Detail VC", message: (error?.localizedDescription)!)
                 return
             }
             if sucess {
-                self.refreshFetchResult()
-                // If still zero, edge case
-                if self.fetchedResultsController.fetchedObjects?.count == 0 {
-                    self.collectionView.isHidden = true
-                    self.noImageLabel.isHidden = false
+                self.photoDictionary = photoDictionary
+                // Save photo object in Core Data
+                for photoObject in photoDictionary {
+                    guard let photoURL = photoObject[FlickrClient.FlickrResponseKeys.MediumURL] as? String else {
+                        fatalError(FlickrClient.FlickrError.DomainErrorNotFoundURLKey)
+                    }
+                    do {
+                        let imageData = try Data(contentsOf: URL(string: photoURL)!) as NSData
+                        
+                        self.savePhotoObject(context: self.sharedContext, photoURL: photoURL, curPin: self.curPin, data: imageData)
+                        
+                        self.refreshFetchResult()
+                        performUIUpdatesOnMain {
+                            self.collectionView.reloadData()
+                        }
+                    }
+                    catch {
+                        return
+                    }
+                    
                 }
+                
             }
-            self.newCollectionButtonOutlet.isEnabled = true
         }
     }
     
-
+    // save Photo object with photoURL, Pin, photoDat into CoreData
+    func savePhotoObject(context: NSManagedObjectContext,photoURL: String, curPin: Pin, data: NSData) {
+        let photo = NSEntityDescription.insertNewObject(forEntityName: "Photo", into: context) as! Photo
+        photo.photoURL = photoURL
+        photo.pin = curPin
+        photo.imageData = data
+        do {
+            try context.save()
+        } catch let error as NSError {
+            fatalError("Could not save Photo, error \(error.localizedDescription)")
+        }
+    }
+    
 }
 

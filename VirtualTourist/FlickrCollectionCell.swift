@@ -11,19 +11,19 @@ import UIKit
 
 class FlickrCollectionCell : UICollectionViewCell {
     
-    @IBOutlet weak var activeIndicator: UIActivityIndicatorView!
     @IBOutlet weak var flickrImageView: UIImageView!
+    @IBOutlet var activeIndicator: UIActivityIndicatorView!
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        if flickrImageView.image == nil {
-            flickrImageView.isHidden = true
-            activeIndicator.isHidden = false
-            activeIndicator.color = UIColor.red
-            activeIndicator.startAnimating()
-            flickrImageView.backgroundColor = UIColor.blue
-        }
+//        if flickrImageView.image == nil {
+//            flickrImageView.isHidden = true
+//            activeIndicator.isHidden = false
+//            activeIndicator.color = UIColor.red
+//            activeIndicator.startAnimating()
+//            flickrImageView.backgroundColor = UIColor.blue
+//        }
         
     }
 }
