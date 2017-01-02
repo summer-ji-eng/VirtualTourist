@@ -29,6 +29,9 @@ extension DetailPinViewController {
         flickrClient = FlickrClient.sharedClient()
         controllerUtilities = ControllerUtilites.sharedUtilites()
         
+        /* Set up collection View Flow Layout */
+        setupCollectionViewFlowLayout()
+        
         /* setup top map to display the pin on the map*/
         configureMapView(pin: curPin, mapRegion: curMapRegion)
         
@@ -36,6 +39,16 @@ extension DetailPinViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         //collectionView.prefetchDataSource = self
+    }
+    
+    func setupCollectionViewFlowLayout() {
+        
+        let space : CGFloat = 3.0
+        let dimension = (view.frame.size.width - 2 * space) / 3.0
+        
+        cvFlowLayout.minimumLineSpacing = space
+        cvFlowLayout.minimumInteritemSpacing = space
+        cvFlowLayout.itemSize = CGSize(width: dimension, height: dimension)
     }
     
     // MARK: -MapView properity configurate and add annotation

@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreData
 
-class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class DetailPinViewController: UIViewController, NSFetchedResultsControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     // MARK: -Properties
     var curPin : Pin!
@@ -28,6 +28,7 @@ class DetailPinViewController: UIViewController, NSFetchedResultsControllerDeleg
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var newCollectionButtonOutlet: UIButton!
     @IBOutlet weak var noImageLabel: UILabel!
+    @IBOutlet weak var cvFlowLayout: UICollectionViewFlowLayout!
     
     // store updated indexes, this is used in fetch result delegate
     var blockOperations: [BlockOperation] = []

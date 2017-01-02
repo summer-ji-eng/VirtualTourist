@@ -146,6 +146,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="Vz2-3Z-cRu" id="KWi-4U-NAE"/>
+                        <outlet property="cvFlowLayout" destination="fft-Hg-nEU" id="3k5-J8-Vz5"/>
                         <outlet property="mapView" destination="4tA-fg-j7i" id="vZI-Dh-Rm3"/>
                         <outlet property="newCollectionButtonOutlet" destination="dhB-s8-DxU" id="Oyg-bM-oSP"/>
                         <outlet property="noImageLabel" destination="hW8-A9-Yrg" id="za4-YR-PQ8"/>

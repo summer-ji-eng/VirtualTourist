@@ -77,8 +77,8 @@ extension FlickrClient {
     
     
     struct BBoxParameters {
-        static let BOUNDING_BOX_HALF_WIDTH = 0.05
-        static let BOUNDING_BOX_HALF_HEIGHT = 0.05
+        static let BOUNDING_BOX_HALF_WIDTH = 0.1
+        static let BOUNDING_BOX_HALF_HEIGHT = 0.1
         static let LAT_MIN = -90.0
         static let LAT_MAX = 90.0
         static let LON_MIN = -180.0
