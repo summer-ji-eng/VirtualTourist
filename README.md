@@ -12,7 +12,6 @@ The Virtual Tourist app downloads and stores images from Flickr. The app allows 
 The project gives me practice with powerful mechanisms for persisting data locally on a device. Storing media and retrieving it later is an essential skill for any iOS developer.
 
 ## Screen Record
-[](http://i.giphy.com/l4JyXpkbouleZiaFG.gif)  ![](http://i.giphy.com/3o6ZtlHTvqkR1y8HT2.gif)
+![](http://i.giphy.com/l4JyXpkbouleZiaFG.gif)  ![](http://i.giphy.com/3o6ZtlHTvqkR1y8HT2.gif)
 
-## Credit
-Many thanks to Udacity
+For more detial of this app, please check [here](https://docs.google.com/document/d/1j-UIi1jJGuNWKoEjEk09wwYf4ebefnwcVrUYbiHh1MI/pub?embedded=true). Thanks for Udacity.
